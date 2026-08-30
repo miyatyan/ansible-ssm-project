@@ -1,0 +1,28 @@
+# Ansible
+*.retry
+
+# Environment-specific files
+inventory.ini
+vars/main.yml
+
+# Private keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# SSH
+.ssh/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
