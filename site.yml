@@ -1,0 +1,35 @@
+---
+- hosts: instance
+  gather_facts: no
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - block:
+        - name: setup sample file
+          ansible.builtin.file:
+            path: /tmp/sample
+            state: touch
+            modification_time: preserve
+            access_time: preserve
+
+        - name: check sample file
+          ansible.builtin.stat:
+            path: /tmp/sample
+
+      vars:
+        ansible_host: "{{ private_sv_host }}"
+        ansible_ssh_common_args: >-
+          -o ProxyCommand="ssh
+          -o StrictHostKeyChecking=no
+          -i {{ lookup('env', 'EXEC_SV_SSH_KEY') }}
+          ec2-user@{{ exec_sv.host }}
+          \"sudo su -lc
+          'aws ssm start-session
+          --target {{ private_sv_host }}
+          --document-name AWS-StartSSHSession
+          --parameters 'portNumber=22''\""
+        ansible_user: ec2-user
+        ansible_ssh_private_key_file: "{{ lookup('env', 'PRIVATE_SV_SSH_KEY') }}"
+        ansible_become: true

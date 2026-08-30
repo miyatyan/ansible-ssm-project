@@ -1,0 +1,13 @@
+[instance-ut]
+test_sv_uta private_sv_host=i-xxxxxxxxxxxxxxxxx
+test_sv_utb private_sv_host=i-yyyyyyyyyyyyyyyyy
+test_sv_utc private_sv_host=i-zzzzzzzzzzzzzzzzz
+
+[instance-it]
+test_sv_ita private_sv_host=i-xxxxxxxxxxxxxxxxx
+test_sv_itb private_sv_host=i-yyyyyyyyyyyyyyyyy
+test_sv_itc private_sv_host=i-zzzzzzzzzzzzzzzzz
+
+[instance:children]
+instance-ut
+instance-it
