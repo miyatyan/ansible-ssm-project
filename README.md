@@ -6,45 +6,9 @@ Private EC2に対してAnsibleから直接SSH接続するのではなく、**AWS
 
 ## Architecture
 
-```mermaid
-flowchart TB
-
-    01["要件・制約<br/>・Private EC2のSGにAnsible実行サーバからのInboundルール設定は不可<br/>・利用可能なプラグインに制限あり<br/>・amazon.aws.aws_ssmは利用不可<br/>・Private EC2をAnsibleで新規構築<br/>・EC2およびAWSサービスの構成管理"]
-
-    02["接続方式の検討"]
-
-    11["Ansible実行サーバ"]
-    12["Ansible実行サーバ"]
-    13["Ansible実行サーバ<br/>※SSHトンネル元"]
-
-    21["踏み台サーバ"]
-
-    31["Private Subnet EC2"]
-
-    41["AWS Systems Manager"]
-
-    51["Security Group<br/>Ansible実行サーバからのTCP/22<br/>→ 設定不要"]
-
-    %% 直接SSH方式
-    11 -->|"SSH :22"| 31
-    01 -.->|"要件上不可"| 11
-
-    %% 接続方式の検討
-    01 --> 02
-
-    %% 検討案1：踏み台サーバ経由
-    02 -->|"案1：踏み台サーバ経由<br/>❌ 不採用"| 12
-    12 -->|"SSH :22"| 21
-    21 -->|"SSH :22"| 31
-
-    %% 検討案2：SSM SSHトンネル
-    02 -->|"案2：SSM SSHトンネル<br/>⭕ 採用"| 13
-    13 -->|"AWS CLI<br/>aws ssm start-session"| 41
-    41 -->|"SSM Session<br/>AWS-StartSSHSession"| 31
-
-    %% Security Group
-    31 --- 51
-```
+<p align="center">
+  <img src="./images/architecture.jpg" width="700">
+</p>
 
 ## 背景・要件
 
